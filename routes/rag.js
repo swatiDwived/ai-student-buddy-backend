@@ -8,6 +8,7 @@ const upload = require('../middleware/uploadMiddleware');
 const auth = require('../middleware/authMiddleware');
 const Session = require('../models/Session');
 const Flashcard = require('../models/Flashcard'); 
+const User = require('../models/User');
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -84,6 +85,12 @@ router.post('/upload-pdf', auth, upload.single('pdfDocument'), async (req, res) 
 
         // 6. Housekeeping: Delete local file
         fs.unlinkSync(req.file.path);
+        
+        // 7. Securely increment the mastery count on the backend
+        await User.findByIdAndUpdate(
+            req.user.id,
+            { $inc: { sessionsMastered: 1 } }
+        );
 
         res.status(201).json(savedCards);
 
