@@ -20,6 +20,7 @@ app.use('/api/sessions', require('./routes/sessions'));
 app.use('/api/messages', require('./routes/messages'));
 app.use('/api/flashcards', require('./routes/flashcards'));
 app.use('/api/users', require('./routes/dashboard')); 
+app.use('/api/rag', require('./routes/rag'));
 
 // Basic Health Check Route
 app.get('/api', (req, res) => {
